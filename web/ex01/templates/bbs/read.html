@@ -1,0 +1,50 @@
+<script>
+    const bbs_writer = "{{bbs.bbs_writer}}";
+    const bbs_key="{{bbs.bbs_key}}";
+</script>
+
+<div class="my-5 px-5">
+    <h1 class="text-center mb-5">{{title}}</h1>
+    <div class="text-end mb-3" id="update">
+        <button class="btn btn-success update">수정</button>
+        <button class="btn btn-danger delete">삭제</button>
+    </div>
+    <div class="card">
+        <div class="card-body">
+            <h5>{{bbs.bbs_title}}</h5>
+            <hr>
+            <div style="white-space: pre-wrap;">{{bbs.bbs_contents}}</div>
+        </div>
+        <div class="card-footer">
+            Posted by {{bbs.bbs_writer}} on {{bbs.fmtdate}}
+        </div>
+    </div>
+    {%include 'bbs/reply.html'%}
+</div>
+
+<script>
+    if(bbs_writer == uid) {
+        $("#update").show();
+    }
+    else {
+        $("#update").hide();
+    }
+
+    $(".delete").on("click", function() {
+        if(!confirm(`${bbs_key}번 게시글을 삭제하실래요?`)) return;
+        //삭제
+        $.ajax({
+            type : "delete",
+            url : `/bbs/${bbs_key}`,
+            success : function(data) {
+                if(data=='success') {
+                    location.href="/bbs";
+                }
+            }
+        })
+    })
+
+    $(".update").on("click", ()=> {
+        location.href=`/bbs/update/${bbs_key}`
+    })
+</script>

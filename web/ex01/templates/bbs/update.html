@@ -1,0 +1,36 @@
+<div class="my-5">
+    <h1 class="text-center mb-5">{{title}}</h1>
+    <div class="px-5">
+        <form name="frm">
+            <input name="title" class="form-control mb-2" value="{{bbs.bbs_title}}">
+            <textarea name="contents" class="form-control" rows="10">{{bbs.bbs_contents}}</textarea>
+            <div class="text-center mt-3">
+                <button class="btn btn-primary px-5">저장</button>
+                <button type="reset" class="btn btn-secondary px-5">취소</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    $(frm).on("submit", (e)=>{
+        e.preventDefault();
+        const bbs_title=$(frm.title).val();
+        const bbs_contents=$(frm.contents).val();
+        const bbs_key="{{bbs.bbs_key}}"
+        if(!confirm("정말로 수정하실래요?")) return;
+        //수정
+        console.log(bbs_title, bbs_contents, bbs_key);
+        $.ajax({
+            type : "post",
+            url : "/bbs/update",
+            data:JSON.stringify({bbs_title, bbs_contents, bbs_key }),
+            success : function(data) {
+                if(data=='success') {
+                    location.href=`/bbs/${bbs_key}`
+                }
+            }
+        })
+    });
+    
+</script>
